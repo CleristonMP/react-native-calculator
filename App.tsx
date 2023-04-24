@@ -38,7 +38,36 @@ export default class App extends Component {
     this.setState({...initialState});
   };
 
-  setOperation = (operation: any) => {};
+  setOperation = (operation: any) => {
+    if (this.state.current === 0) {
+      this.setState({operation, current: 1, clearDisplay: true});
+    } else {
+      const isEquals = operation === '=';
+      const values = [...this.state.values];
+      let displayValue;
+      try {
+        // eslint-disable-next-line no-eval
+        values[0] = eval(`${values[0]} ${this.state.operation} ${values[1]}`);
+        displayValue = values[0].toString();
+        if (values[0].toString().length > 9) {
+          displayValue = values[0].toPrecision(5);
+        }
+      } catch (e) {
+        values[0] = this.state.values[0];
+        displayValue = this.state.values[0];
+      }
+
+      values[1] = 0;
+      this.setState({
+        displayValue,
+        operation: isEquals ? null : operation,
+        current: isEquals ? 0 : 1,
+        //clearDisplay: !isEquals,
+        clearDisplay: true,
+        values,
+      });
+    }
+  };
 
   render() {
     return (
