@@ -18,7 +18,14 @@ export default class App extends Component {
     const clearDisplay =
       this.state.displayValue === '0' || this.state.clearDisplay;
 
-    if (n === '.' && this.state.displayValue.includes('.')) {
+    if (
+      this.state.values[this.state.current].toString().length === 9 &&
+      !clearDisplay
+    ) {
+      return;
+    }
+
+    if (n === '.' && !clearDisplay && this.state.displayValue.includes('.')) {
       return;
     }
 
